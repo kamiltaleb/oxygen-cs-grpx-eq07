@@ -1,18 +1,24 @@
-# Utiliser une image de base Python 3.8
+# Stage 1: Construction des dépendances
+FROM python:3.8-alpine AS builder
+
+WORKDIR /build
+
+# Copier uniquement les fichiers de dépendances et installer les dépendances
+COPY Pipfile* ./
+RUN pip install --no-cache-dir pipenv && \
+    pipenv install --system --deploy --ignore-pipfile
+
+# Stage 2: Image finale
 FROM python:3.8-slim-buster
 
-RUN mkdir /app 
-# Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
-# Copier les fichiers requirements.txt dans le conteneur
-COPY requirements.txt /app
+# Copier les fichiers de l'étape précédente
+COPY --from=builder /usr/local/lib/python3.8/site-packages/ /usr/local/lib/python3.8/site-packages/
+COPY --from=builder /usr/local/bin/ /usr/local/bin/
 
-# Installer les dépendances à l'aide de pip
-RUN pip install -r /app/requirements.txt
-
-# Copier le reste des fichiers de l'application dans le conteneur
-COPY ../src/ /app
+# Copier le reste des fichiers de l'application
+COPY . .
 
 # Exécuter l'application
-CMD [ "python", "./main.py" ]
+CMD [ "python", "src/main.py" ]
