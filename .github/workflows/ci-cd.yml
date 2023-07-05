@@ -31,5 +31,5 @@ jobs:
       - name: Publish Docker image
         run: |
           echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username mahrez29 --password-stdin
-          docker tag myapp:latest USERNAME/myapp:latest
-          docker push USERNAME/myapp:latest
+          docker tag myapp:latest mahrez29/myapp:latest
+          docker push mahrez29/myapp:latest
