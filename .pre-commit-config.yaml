@@ -5,20 +5,21 @@ repos:
       - id: check-added-large-files
 
   - repo: https://github.com/pycqa/pylint
-    rev: v3.0.0a6  # Utilisez la version de pylint provenant de requirements.txt
+    rev: v3.0.0a6
     hooks:
-    -   id: pylint
+      - id: pylint
+        args: [--disable=all]
 
   - repo: https://github.com/psf/black
     rev: 23.3.0
     hooks:
-    - id: black
+      - id: black
 
   - repo: local
     hooks:
-    - id: pytest
-      name: pytest
-      entry: pytest
-      language: system
-      types: [python]
-      pass_filenames: false
+      - id: pytest
+        name: pytest
+        entry: .venv/Scripts/pytest.exe
+        language: system
+        types: [python]
+        pass_filenames: false

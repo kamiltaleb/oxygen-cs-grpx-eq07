@@ -4,15 +4,16 @@ import requests
 import json
 import time
 from dotenv import load_dotenv
-import os; 
+import os
 
 load_dotenv()
+
 
 class Main:
     def __init__(self):
         self._hub_connection = None
-        self.HOST =  os.getenv('HOST') # Setup your host here
-        self.TOKEN = os.getenv('TOKEN')  # Setup your token here
+        self.HOST = os.getenv("HOST")  # Setup your host here
+        self.TOKEN = os.getenv("TOKEN")  # Setup your token here
         self.TICKETS = 1  # Setup your tickets here
         self.T_MAX = os.getenv("T_MAX")  # Setup your max temperature here
         self.T_MIN = os.getenv("T_MIN")  # Setup your min temperature here
@@ -52,7 +53,9 @@ class Main:
         self._hub_connection.on("ReceiveSensorData", self.onSensorDataReceived)
         self._hub_connection.on_open(lambda: print("||| Connection opened."))
         self._hub_connection.on_close(lambda: print("||| Connection closed."))
-        self._hub_connection.on_error(lambda data: print(f"||| An exception was thrown closed: {data.error}"))
+        self._hub_connection.on_error(
+            lambda data: print(f"||| An exception was thrown closed: {data.error}")
+        )
 
     def onSensorDataReceived(self, data):
         try:
@@ -81,12 +84,7 @@ class Main:
             pass
         except requests.exceptions.RequestException as e:
             # To implement
-            pass 
-
-    def buggy_function():
-        return undefined_variable
-
-
+            pass
 
 
 if __name__ == "__main__":
