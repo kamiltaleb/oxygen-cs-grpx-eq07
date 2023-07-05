@@ -12,12 +12,12 @@ load_dotenv()
 class Main:
     def __init__(self):
         self._hub_connection = None
-        self.HOST = os.getenv("HOST")  # Setup your host here
-        self.TOKEN = os.getenv("TOKEN")  # Setup your token here
-        self.TICKETS = 1  # Setup your tickets here
-        self.T_MAX = os.getenv("T_MAX")  # Setup your max temperature here
-        self.T_MIN = os.getenv("T_MIN")  # Setup your min temperature here
-        self.DATABASE = None  # Setup your database here
+        self.HOST =  os.getenv('HOST') # Setup your host here
+        self.TOKEN = os.getenv('TOKEN')  # Setup your token here
+        self.TICKETS = os.environ.get("TICKETS", default=1)  # Setup your tickets here
+        self.T_MAX = os.environ.get("T_MAX", default=25)  # Setup your max temperature here
+        self.T_MIN = os.environ.get("T_MIN", default=17)  # Setup your min temperature here
+          # Setup your database here
 
     def __del__(self):
         if self._hub_connection != None:
