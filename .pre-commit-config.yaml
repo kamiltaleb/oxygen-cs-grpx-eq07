@@ -1,16 +1,16 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0
+    rev: v4.4.0
     hooks:
       - id: check-added-large-files
 
   - repo: https://github.com/pycqa/pylint
-    rev: pylint-2.9.6
+    rev: v3.0.0a6  # Utilisez la version de pylint provenant de requirements.txt
     hooks:
     -   id: pylint
 
   - repo: https://github.com/psf/black
-    rev: 21.9b0
+    rev: 23.3.0
     hooks:
     - id: black
 
