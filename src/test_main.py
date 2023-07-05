@@ -1,10 +1,9 @@
 import unittest
-import logging
 from unittest.mock import MagicMock, patch
 from signalrcore.hub_connection_builder import HubConnectionBuilder
 from src.main import Main
 
-class TestMain(unittest.TestCase):
+class test_main(unittest.TestCase):
 
     @patch('src.main.HubConnectionBuilder')
     @patch('src.main.requests')
