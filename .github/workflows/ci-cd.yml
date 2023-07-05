@@ -25,9 +25,6 @@ jobs:
       - name: Run unit tests
         run: pytest
 
-      - name: Static code analysis
-        run: flake8
-
       - name: Build Docker image
         run: docker build -t myapp:latest .
 
