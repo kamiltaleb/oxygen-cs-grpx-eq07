@@ -82,9 +82,7 @@ class Main:
         except requests.exceptions.RequestException as e:
             # To implement
             pass 
-    def buggy_function():
-         return undefined_variable
-
+    def badly_formatted_function(): return "Badly formatted code"
 
 
 
