@@ -5,23 +5,18 @@ on:
     branches:
       - main
       - develop
+env:
+  MYSQL_HOST: ${{ secrets.DATABASE_HOST }}
+  MYSQL_DATABASE: ${{ secrets.DATABASE_NAME }}
+  MYSQL_USER: ${{ secrets.DATABASE_USER }}
+  MYSQL_ROOT_PASSWORD: ${{ secrets.DATABASE_PWD }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       CI: true
-    services:
-      mysql-master:
-        image: mysql:8.0
-        ports:
-          - 3306/tcp
-        env:
-          MYSQL_HOST: ${{ secrets.DATABASE_HOST }}
-          MYSQL_DATABASE: ${{ secrets.DATABASE_NAME }}
-          MYSQL_USER: ${{ secrets.DATABASE_USER }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DATABASE_PWD }}
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -37,7 +32,7 @@ jobs:
       - name: Setup database
         run: |
           sudo systemctl start mysql.service
-          mysql -u $MYSQL_USER -p $MYSQL_PWD < <(echo "CREATE DATABASE oxygen; USE oxygen; CREATE TABLE hvac_data (timestamp datetime not null, event longtext not null);")
+          mysql -u ${{ secrets.DATABASE_USER }} -p ${{ secrets.DATABASE_PWD }} < <(echo "CREATE DATABASE oxygen; USE oxygen; CREATE TABLE hvac_data (timestamp datetime not null, event longtext not null);")
 
       - name: Run unit tests
         env:
