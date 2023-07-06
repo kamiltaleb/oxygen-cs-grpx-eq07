@@ -15,7 +15,9 @@ class Main:
     def __init__(self):
         self._hub_connection = None
         self.HOST = os.getenv("HOST")  # Setup your host here
-        self.TOKEN = os.getenv("TOKEN")  # Setup your token here
+        self.TOKEN = os.getenv("TOKEN", default='fMupq1cdfE')  # Setup your token here
+        if not self.TOKEN:
+            raise ValueError("The TOKEN environment variable is not set.")
         self.TICKETS = os.environ.get("TICKETS", default=1)  # Setup your tickets here
         self.T_MAX = os.environ.get(
             "T_MAX", default=25
