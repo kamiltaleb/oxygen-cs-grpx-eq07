@@ -31,5 +31,5 @@ jobs:
       - name: Publish Docker image
         run: |
           echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username mahrez29 --password-stdin
-          docker tag oxygen:latest mahrez29/oxygen:latest
-          docker push mahrez29/oxygen:latest
+          docker tag oxygen:latest mahrez29/myrepo:oxygen
+          docker push mahrez29/myrepo:oxygen
