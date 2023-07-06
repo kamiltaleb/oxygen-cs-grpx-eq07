@@ -13,7 +13,7 @@ jobs:
       CI: true
     services:
       mysql-master:
-        image: mysql:5.7
+        image: mysql:8.33
         ports:
           - 3306/tcp
         env:
@@ -21,6 +21,7 @@ jobs:
           MYSQL_DATABASE: ${{ secrets.DATABASE_NAME }}
           MYSQL_USER: ${{ secrets.DATABASE_USER }}
           MYSQL_PASSWORD: ${{ secrets.DATABASE_PWD }}
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -33,6 +34,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Setup database
+        run: |
+          sudo systemctl start mysql.service
+          mysql -u $MYSQL_USER -p $MYSQL_PWD < <(echo "CREATE DATABASE oxygen; USE oxygen; CREATE TABLE hvac_data (timestamp datetime not null, event longtext not null);")
+
       - name: Run unit tests
         env:
           HOST: ${{ secrets.HOST }}
@@ -41,11 +47,6 @@ jobs:
           T_MAX: ${{ secrets.T_MAX }}
           T_MIN: ${{ secrets.T_MIN }}
         run: pytest
-
-      - name: Setup database
-        run: |
-          sudo systemctl start mysql.service
-          mysql -u $MYSQL_USER -p $MYSQL_PWD < <(echo "CREATE DATABASE oxygen; USE oxygen; CREATE TABLE hvac_data (timestamp datetime not null, event longtext not null);")
 
       - name: Build Docker image
         run: docker build -t oxygen:latest .
