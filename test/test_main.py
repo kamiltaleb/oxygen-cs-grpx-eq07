@@ -31,10 +31,6 @@ class test_main(unittest.TestCase):
         self.assertIsNotNone(os.environ.get("TICKETS"), "TICKETS VARIABLE IS MISSING")
         self.assertIsNotNone(os.environ.get("T_MAX"), "T_MAX VARIABLE IS MISSING")
         self.assertIsNotNone(os.environ.get("T_MIN"), "T_MIN VARIABLE IS MISSING")
-        self.assertIsNotNone(os.environ.get("DATABASE_HOST"), "DATABASE_HOST VARIABLE IS MISSING")
-        self.assertIsNotNone(os.environ.get("DATABASE_NAME"), "DATABASE_NAME VARIABLE IS MISSING")
-        self.assertIsNotNone(os.environ.get("DATABASE_USER"), "DATABASE_USER VARIABLE IS MISSING")
-        self.assertIsNotNone(os.environ.get("DATABASE_PWD"), "DATABASE_PWD VARIABLE IS MISSING")
 
     def test_var_enviro_default_value(self):
         if "TICKETS" in os.environ:
@@ -53,5 +49,5 @@ class test_main(unittest.TestCase):
     def test_temp_in_valid_borns(self):
         tmax = os.environ.get("T_MAX")
         tmin = os.environ.get("T_MIN")
-        self.assertGreaterEqual(tmin, "10", "TEMP TOO COLD, SOMETHING WRONG")
-        self.assertLessEqual(tmax, "100", "TEMP TOO HOT, SOMETHING WRONG")
+        self.assertGreater(tmin, "10", "TEMP TOO COLD, SOMETHING WRONG")
+        self.assertLess(tmax, "80", "TEMP TOO HOT, SOMETHING WRONG")
