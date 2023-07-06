@@ -1,1 +1,0 @@
-DOCKERHUB_TOKEN = 'dckr_pat_-X_0JdB8FwbJHJPexQKBtuvWXrY'
