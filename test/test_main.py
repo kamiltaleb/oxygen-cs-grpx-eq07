@@ -25,7 +25,7 @@ class test_main(unittest.TestCase):
             f"{main.HOST}/SensorHub?token={main.TOKEN}"
         )
 
-    @unittest.skip("Skipping environment variable test in CI/CD")
+    @unittest.skipIf(os.getenv("CI"), "Skipping this test on CI.")
     def test_if_var_enviro_exist(self):
         self.assertIsNotNone(os.environ.get("HOST"), "HOST VARIABLE IS MISSING")
         self.assertIsNotNone(os.environ.get("TOKEN"), "TOKEN VARIABLE IS MISSING")
@@ -33,7 +33,7 @@ class test_main(unittest.TestCase):
         self.assertIsNotNone(os.environ.get("T_MAX"), "T_MAX VARIABLE IS MISSING")
         self.assertIsNotNone(os.environ.get("T_MIN"), "T_MIN VARIABLE IS MISSING")
 
-    @unittest.skip("Skipping environment variable test in CI/CD")
+    @unittest.skipIf(os.getenv("CI"), "Skipping this test on CI.")
     def test_var_enviro_default_value(self):
         if "TICKETS" in os.environ:
             del os.environ["TICKETS"]
@@ -48,7 +48,7 @@ class test_main(unittest.TestCase):
         t_min = os.environ.get("T_MIN", default="17")
         self.assertEquals(t_min, "17")
 
-    @unittest.skip("Skipping environment variable test in CI/CD")
+    @unittest.skipIf(os.getenv("CI"), "Skipping this test on CI.")
     def test_temp_in_valid_borns(self):
         tmax = os.environ.get("T_MAX")
         tmin = os.environ.get("T_MIN")
