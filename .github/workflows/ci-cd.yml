@@ -26,10 +26,10 @@ jobs:
         run: pytest
 
       - name: Build Docker image
-        run: docker build -t myapp:latest .
+        run: docker build -t oxygen:latest .
 
       - name: Publish Docker image
         run: |
           echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username mahrez29 --password-stdin
-          docker tag myapp:latest mahrez29/myapp:latest
-          docker push mahrez29/myapp:latest
+          docker tag oxygen:latest mahrez29/oxygen:latest
+          docker push mahrez29/oxygen:latest
