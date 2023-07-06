@@ -33,6 +33,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Setup database
+        run: |
+          sudo systemctl start mysql.service
+          mysql -u $MYSQL_USER -p $MYSQL_PWD < <(echo "CREATE DATABASE oxygen; USE oxygen; CREATE TABLE hvac_data (timestamp datetime not null, event longtext not null);")
+
       - name: Run unit tests
         env:
           HOST: ${{ secrets.HOST }}
@@ -41,11 +46,6 @@ jobs:
           T_MAX: ${{ secrets.T_MAX }}
           T_MIN: ${{ secrets.T_MIN }}
         run: pytest
-
-      - name: Setup database
-        run: |
-          sudo systemctl start mysql.service
-          mysql -u $MYSQL_USER -p $MYSQL_PWD < <(echo "CREATE DATABASE oxygen; USE oxygen; CREATE TABLE hvac_data (timestamp datetime not null, event longtext not null);")
 
       - name: Build Docker image
         run: docker build -t oxygen:latest .
