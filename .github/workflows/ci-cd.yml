@@ -25,6 +25,12 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run unit tests
+        env: 
+          HOST: ${{ secrets.HOST }}
+          TICKETS: ${{ secrets.TICKETS }}
+          TOKEN: ${{ secrets.TOKEN }}
+          T_MAX: ${{ secrets.T_MAX }}
+          T_MIN: ${{ secrets.T_MIN }}
         run: pytest
 
       - name: Build Docker image
