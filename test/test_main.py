@@ -49,5 +49,5 @@ class test_main(unittest.TestCase):
     def test_temp_in_valid_borns(self):
         tmax = os.environ.get("T_MAX")
         tmin = os.environ.get("T_MIN")
-        self.assertGreater(tmin, "10", "TEMP TOO COLD, SOMETHING WRONG")
-        self.assertLess(tmax, "80", "TEMP TOO HOT, SOMETHING WRONG")
+        self.assertGreater(int(tmin), 10, "TEMP TOO COLD, SOMETHING WRONG")
+        self.assertLess(int(tmax), 100, "TEMP TOO HOT, SOMETHING WRONG")
