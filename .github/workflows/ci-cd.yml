@@ -42,10 +42,10 @@ jobs:
 
       - name: Run unit tests
         env:
-          DATABASEL_HOST: 127.0.0.1
+          DATABASE_HOST: 127.0.0.1
           DATABASE_NAME: log680
-          DATABASEL_USER: root
-          DATABASEL_PASSWORD: root
+          DATABASL_USER: root
+          DATABASE_PASSWORD: root
           HOST: http://34.95.34.5
           TICKETS: 1
           TOKEN: fMupq1cdfE
