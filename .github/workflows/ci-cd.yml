@@ -36,9 +36,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Start MySQL service
+        run: sudo systemctl start mysql.service
+
       - name: Setup database
         run: |
-          mysql -h ${{ secrets.MYSQL_HOST }} -u ${{ secrets.MYSQL_USER }} -p${{ secrets.MYSQL_ROOT_PASSWORD }} -e "CREATE DATABASE \`${{ secrets.MYSQL_DATABASE }}\`; USE \`${{ secrets.MYSQL_DATABASE }}\`; CREATE TABLE hvac_data (timestamp datetime not null, event longtext not null);"
+          mysql -h ${{ secrets.MYSQL_HOST }} -u ${{ secrets.MYSQL_USER }} -p"${{ secrets.MYSQL_ROOT_PASSWORD }}" <<< "CREATE DATABASE ${{ secrets.MYSQL_DATABASE }}; USE ${{ secrets.MYSQL_DATABASE }}; CREATE TABLE hvac_data (timestamp datetime not null, event longtext not null);"
 
       - name: Run unit tests
         env:
