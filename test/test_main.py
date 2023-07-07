@@ -22,7 +22,7 @@ class test_main(unittest.TestCase):
 
         # Verify that the HubConnectionBuilder methods were called with the expected arguments
         hub_builder_mock.with_url.assert_called_with(
-            f"{main.HOST}/SensorHub?token={main.TOKEN}"
+            f"{os.environ.get('HOST')}/SensorHub?token={os.environ.get('TOKEN')}"
         )
 
     def test_if_var_enviro_exist(self):
