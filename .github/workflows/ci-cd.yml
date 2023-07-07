@@ -52,12 +52,12 @@ jobs:
           T_MAX: 25
           T_MIN: 17
         run: pytest
-        
+
       - name: Build Docker image
-        run: docker build -t myapp:latest .
+        run: docker build -t oxygen:latest .
 
       - name: Publish Docker image
         run: |
-          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username USERNAME --password-stdin
-          docker tag myapp:latest USERNAME/myapp:latest
-          docker push USERNAME/myapp:latest
+          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username hzsam --password-stdin
+          docker tag oxygen:latest hzsam/myrepo:oxygen
+          docker push hzsam/myrepo:oxygen
