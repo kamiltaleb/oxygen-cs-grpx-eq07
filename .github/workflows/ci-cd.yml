@@ -7,21 +7,14 @@ on:
       - develop
 
 env:
-  MYSQL_HOST: ${{ secrets.DATABASE_HOST }}
-  MYSQL_DATABASE: ${{ secrets.DATABASE_NAME }}
-  MYSQL_USER: ${{ secrets.DATABASE_USER }}
-  MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+  MYSQL_HOST: 127.0.0.1
+  MYSQL_DATABASE: log680
+  MYSQL_USER: root
+  MYSQL_ROOT_PASSWORD: root
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.DATABASE_NAME }}
 
     steps:
       - name: Checkout code
@@ -32,21 +25,23 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: Start MySQL service
+        run: sudo systemctl start mysql.service
+
+      - name: Install MySQL client
+        run: sudo apt-get install mysql-client -y
+
       - name: Set up Database
-        env:
-          MYSQL_HOST: ${{ secrets.DATABASE_HOST }}
-          MYSQL_USER: ${{ secrets.DATABASE_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
         run: |
-          mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;"
-          mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE -e "CREATE TABLE IF NOT EXISTS hvac_data (timestamp datetime not null, event longtext not null);"
+          mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;"
+          mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_ROOT_PASSWORD $MYSQL_DATABASE -e "CREATE TABLE IF NOT EXISTS hvac_data (timestamp datetime not null, event longtext not null);"
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
       - name: Run unit tests
         env:
-          HOST: ${{ secrets.HOST }}
+          HOST: http://34.95.34.5
           TICKETS: ${{ secrets.TICKETS }}
           TOKEN: ${{ secrets.TOKEN }}
           T_MAX: ${{ secrets.T_MAX }}
