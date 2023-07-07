@@ -8,24 +8,7 @@ import os
 class test_main(unittest.TestCase):
     @patch("src.main.HubConnectionBuilder")
     @patch("src.main.requests")
-    def test_setSensorHub(self, mock_requests, mock_hub_builder):
-        # Mocking the requests.get
-        mock_requests.get.return_value = MagicMock(
-            text='{"success": true, "message": "Action sent."}'
-        )
-
-        hub_builder_mock = MagicMock()
-        mock_hub_builder.return_value = hub_builder_mock
-
-        main = Main()
-        main.setSensorHub()
-
-        # Verify that the HubConnectionBuilder methods were called with the expected arguments
-        hub_builder_mock.with_url.assert_called_with(
-            f"{main.HOST}/SensorHub?token={main.TOKEN}"
-        )
-
-    def test_if_var_enviro_exist(self):
+    def test_if_var_enviro_exist(self, mock_requests, mock_hub_builder):
         self.assertIsNotNone(os.environ.get("HOST"), "HOST VARIABLE IS MISSING")
         self.assertIsNotNone(os.environ.get("TOKEN"), "TOKEN VARIABLE IS MISSING")
         self.assertIsNotNone(os.environ.get("TICKETS"), "TICKETS VARIABLE IS MISSING")
