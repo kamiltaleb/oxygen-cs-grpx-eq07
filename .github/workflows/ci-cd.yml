@@ -1,0 +1,63 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+env:
+  MYSQL_HOST: 127.0.0.1
+  MYSQL_DATABASE: log680
+  MYSQL_USER: root
+  MYSQL_ROOT_PASSWORD: root
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Start MySQL service
+        run: sudo systemctl start mysql.service
+
+      - name: Install MySQL client
+        run: sudo apt-get install mysql-client -y
+
+      - name: Set up Database
+        run: |
+          mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_ROOT_PASSWORD -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$MYSQL_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
+          mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;"
+          mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_ROOT_PASSWORD $MYSQL_DATABASE -e "CREATE TABLE IF NOT EXISTS hvac_data (timestamp datetime not null, event longtext not null);"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run unit tests
+        env:
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_NAME: log680
+          DATABASE_USER: root
+          DATABASE_PASSWORD: root
+          HOST: http://34.95.34.5
+          TICKETS: 1
+          TOKEN: fMupq1cdfE
+          T_MAX: 25
+          T_MIN: 17
+        run: pytest
+
+      - name: Build Docker image
+        run: docker build -t oxygen:latest .
+
+      - name: Publish Docker image
+        run: |
+          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username hzsam --password-stdin
+          docker tag oxygen:latest hzsam/myrepo:oxygen
+          docker push hzsam/myrepo:oxygen

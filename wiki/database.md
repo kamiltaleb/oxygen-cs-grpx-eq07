@@ -1,0 +1,3 @@
+## Base de données
+
+La base de données est utilisée pour enregistrer les valeurs du système HVAC. Dans ce projet, la base de données utilisée est MySQL. Les informations de connexion à la base de données se trouvent dans le fichier .env pour l'utilisation locale sinon elle se retrouve dans les secrets Github pour pipeline (CD). Il est important de changer les informations de connexion pour correspondre à votre base de données locale MySQL en utilisant le fichier de configuration .env. Assurez-vous de mettre à jour les paramètres tels que l'hôte, le nom d'utilisateur, le mot de passe et le nom de la base de données pour qu'ils correspondent à votre environnement de développement.
