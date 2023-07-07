@@ -19,15 +19,15 @@ class test_main(unittest.TestCase):
         if "TICKETS" in os.environ:
             del os.environ["TICKETS"]
         tickets = os.environ.get("TICKETS", default="1")
-        self.assertEquals(tickets, "1")
+        self.assertEqual(tickets, "1")
         if "T_MAX" in os.environ:
             del os.environ["T_MAX"]
         t_max = os.environ.get("T_MAX", default="25")
-        self.assertEquals(t_max, "25")
+        self.assertEqual(t_max, "25")
         if "T_MIN" in os.environ:
             del os.environ["T_MIN"]
         t_min = os.environ.get("T_MIN", default="17")
-        self.assertEquals(t_min, "17")
+        self.assertEqual(t_min, "17")
 
     def test_temp_in_valid_borns(self):
         tmax = os.environ.get("T_MAX")
