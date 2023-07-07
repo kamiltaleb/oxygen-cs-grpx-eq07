@@ -8,8 +8,6 @@ Pour télécharger l'image Docker, vous devez préalablement avoir un compte Doc
 
 3. Utilisez la commande suivante pour télécharger l'image Docker :
 
-4. commande bash docker pull mahrez29/log680
-   Assurez-vous d'inclure le nom de l'image exact tel qu'il est spécifié dans le lien. Cette commande téléchargera l'image Docker sur votre machine.
-   Attendez que le téléchargement soit terminé. Vous pouvez vérifier la progression en regardant les messages affichés dans votre terminal.
+4. Commande bash docker pull hzsam/myrepo:oxygen ou hzsam/myrepo:metrics pour push l'image du TP1 ou TP2 respectivement. Cette commande téléchargera l'image Docker sur votre machine. Attendez que le téléchargement soit terminé. Vous pouvez vérifier la progression en regardant les messages affichés dans votre terminal.
 
-5. Une fois le téléchargement terminé, vous pouvez utiliser l'image Docker dans vos projets ou pour exécuter des conteneurs Docker localement. Le lien fourni dans votre message (https://hub.docker.com/repository/docker/mahrez29/log680/tags?page=1&ordering=last_updated) peut être utilisé pour accéder à l'image Docker sur le Hub Docker, où vous pouvez trouver plus d'informations et d'autres versions de l'image.
+5. Une fois le téléchargement terminé, vous pouvez utiliser l'image Docker dans vos projets ou pour exécuter des conteneurs Docker localement. peut être utilisé pour accéder à l'image Docker sur le Hub Docker, où vous pouvez trouver plus d'informations et d'autres versions de l'image.

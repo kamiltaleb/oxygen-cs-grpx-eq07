@@ -3,7 +3,7 @@
 L'environnement de test utilié est unittest qui est déja intégré dans python. L'essenble des tests
 se retrouve dans le dossier test du projet.
 
-1. Pour lancer seulement les test unitaire, il suffit une commande `py test_main.py` au niveau du dossier de test. Un résumé sera affiché dans la console pour les tests qui ont réussis et pour les tests qui ont échoués.
+1. Pour lancer seulement les test unitaire, il suffit une commande `python -m unittest test/test_main.py` au niveau du root. Un résumé sera affiché dans la console pour les tests qui ont réussis et pour les tests qui ont échoués.
 
 2. Les test seront aussi lancer automatiquement durant le pré-commit. Si il y a une erreur dans les test unitaires, le commit sera annulé.
 
