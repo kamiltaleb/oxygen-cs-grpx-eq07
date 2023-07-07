@@ -9,7 +9,8 @@ env:
   MYSQL_HOST: ${{ secrets.DATABASE_HOST }}
   MYSQL_DATABASE: ${{ secrets.DATABASE_NAME }}
   MYSQL_USER: ${{ secrets.DATABASE_USER }}
-  MYSQL_ROOT_PASSWORD: ${{ secrets.DATABASE_PWD }}
+  MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
 
 jobs:
   build:
@@ -18,7 +19,7 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DATABASE_PWD }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
     env:
       CI: true
