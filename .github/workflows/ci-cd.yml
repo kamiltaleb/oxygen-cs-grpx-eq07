@@ -14,10 +14,14 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
-    env:
-      CI: true
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.DATABASE_NAME }}
 
     steps:
       - name: Checkout code
@@ -28,15 +32,16 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: Set up Database
+        env:
+          MYSQL_HOST: ${{ secrets.DATABASE_HOST }}
+          MYSQL_USER: ${{ secrets.DATABASE_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+        run: |
+          mysql -h${MYSQL_HOST} -u${MYSQL_USER} -p${MYSQL_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};"
+
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      - name: Start MySQL service
-        run: sudo systemctl start mysql.service
-
-      - name: Setup database
-        run: |
-          mysql -h ${{ secrets.DATABASE_HOST }} -u ${{ secrets.DATABASE_USER }} -p"${{ secrets.DATABASE_ROOT_PASSWORD }}" <<< "CREATE DATABASE ${{ secrets.DATABASE_NAME }}; USE ${{ secrets.DATABASE_NAME }}; CREATE TABLE hvac_data (timestamp datetime not null, event longtext not null);"
 
       - name: Run unit tests
         env:
@@ -46,12 +51,3 @@ jobs:
           T_MAX: ${{ secrets.T_MAX }}
           T_MIN: ${{ secrets.T_MIN }}
         run: pytest
-
-      - name: Build Docker image
-        run: docker build -t oxygen:latest .
-
-      - name: Publish Docker image
-        run: |
-          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username hzsam --password-stdin
-          docker tag oxygen:latest hzsam/myrepo:oxygen
-          docker push hzsam/myrepo:oxygen
