@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - develop
+
 env:
   MYSQL_HOST: ${{ secrets.DATABASE_HOST }}
   MYSQL_DATABASE: ${{ secrets.DATABASE_NAME }}
@@ -19,6 +20,7 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+
     env:
       CI: true
 
