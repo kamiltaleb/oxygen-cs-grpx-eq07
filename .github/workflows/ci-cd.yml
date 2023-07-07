@@ -33,6 +33,7 @@ jobs:
 
       - name: Setup database
         run: |
+          sudo systemctl start mysql.service
           mysql -u $MYSQL_USER < <(echo  "CREATE DATABASE ${MYSQL_DATABASE}; USE ${MYSQL_DATABASE}; CREATE TABLE hvac_data (timestamp datetime not null, event longtext not null);"
 
       - name: Run unit tests
