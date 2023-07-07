@@ -51,4 +51,3 @@ jobs:
           echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username hzsam --password-stdin
           docker tag oxygen:latest hzsam/myrepo:oxygen
           docker push hzsam/myrepo:oxygen
-Z
