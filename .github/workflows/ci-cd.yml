@@ -32,7 +32,7 @@ jobs:
       - name: Setup database
         run: |
           sudo systemctl start mysql.service
-          mysql -u ${{ secrets.DATABASE_USER }} -p ${{ secrets.DATABASE_PWD }} < <(echo "CREATE DATABASE oxygen; USE oxygen; CREATE TABLE hvac_data (timestamp datetime not null, event longtext not null);")
+          mysql -u $DATABASE_USER -p $DATABASE_PWD < <(echo "CREATE DATABASE log680; USE log680; CREATE TABLE hvac_data (timestamp datetime not null, event longtext not null);")
 
       - name: Run unit tests
         env:
