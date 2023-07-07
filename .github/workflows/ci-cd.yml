@@ -44,7 +44,7 @@ jobs:
         env:
           DATABASE_HOST: 127.0.0.1
           DATABASE_NAME: log680
-          DATABASL_USER: root
+          DATABASE_USER: root
           DATABASE_PASSWORD: root
           HOST: http://34.95.34.5
           TICKETS: 1
