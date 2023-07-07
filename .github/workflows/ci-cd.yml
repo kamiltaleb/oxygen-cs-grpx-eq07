@@ -37,7 +37,7 @@ jobs:
 
       - name: Setup database
         run: |
-          mysql -h 127.0.0.1 -u ${{ secrets.DATABASE_USER }} -p${{ secrets.DATABASE_PWD }} < <(echo "CREATE DATABASE ${MYSQL_DATABASE}; USE ${MYSQL_DATABASE}; CREATE TABLE hvac_data (timestamp datetime not null, event longtext not null);")
+          mysql -h 127.0.0.1 -u${{ secrets.DATABASE_USER }} -p${{ secrets.DATABASE_PWD }} < <(echo "CREATE DATABASE ${MYSQL_DATABASE}; USE ${MYSQL_DATABASE}; CREATE TABLE hvac_data (timestamp datetime not null, event longtext not null);")
 
       - name: Run unit tests
         env:
