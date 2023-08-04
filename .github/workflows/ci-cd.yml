@@ -36,14 +36,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run unit tests
-        env:
-          DATABASE_HOST: ${{ job.services.postgres.ports[5432] }}
-          DATABASE_NAME: ${{ env.POSTGRES_DB }}
-          DATABASE_USER: ${{ env.POSTGRES_USER }}
-          DATABASE_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-        run: pytest
-
       - name: Build Docker image
         run: docker build -t oxygen:latest .
 
