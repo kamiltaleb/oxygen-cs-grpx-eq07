@@ -36,17 +36,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Install Alembic
-        run: pip install alembic
-
-      - name: Run PostgreSQL migrations
-        env:
-          DATABASE_HOST: ${{ job.services.postgres.ports[5432] }}
-          DATABASE_NAME: ${{ env.POSTGRES_DB }}
-          DATABASE_USER: ${{ env.POSTGRES_USER }}
-          DATABASE_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-        run: alembic upgrade head
-
       - name: Run unit tests
         env:
           DATABASE_HOST: ${{ job.services.postgres.ports[5432] }}
