@@ -14,8 +14,7 @@ FROM python:3.9-slim-buster
 WORKDIR /app
 
 # Copier les fichiers de l'étape précédente
-COPY --from=builder /usr/local/lib/python3.9/site-packages/ /usr/local/lib/python3.9/site-packages/
-COPY --from=builder /usr/local/bin/ /usr/local/bin/
+COPY --from=builder /usr/local/ /usr/local/
 
 # Copier le reste des fichiers de l'application
 COPY . .
