@@ -9,7 +9,7 @@ RUN pip install --no-cache-dir pipenv && \
     pipenv install --system --deploy --ignore-pipfile
 
 # Stage 2: Image finale
-FROM python:3.11.4-alpine-slim-buster
+FROM python:3.11.4-alpine
 
 WORKDIR /app
 
