@@ -4,6 +4,11 @@ on:
     branches:
       - main
 env:
+  HOST: http://34.95.34.5
+  TOKEN: fMupq1cdfE
+  TICKETS: 1
+  T_MAX: 2
+  T_MIN: 19
   POSTGRES_HOST: 34.28.50.31
   POSTGRES_DB: oxygen7db
   POSTGRES_USER: team7
