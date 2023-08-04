@@ -11,9 +11,6 @@ RUN pip install --no-cache-dir pipenv && \
 # Stage 2: Image finale
 FROM python:3.11.4-alpine
 
-# Install the PostgreSQL client library
-RUN apk update && apk add --no-cache postgresql-dev gcc musl-dev
-
 WORKDIR /app
 
 # Copier les fichiers de l'étape précédente
@@ -22,6 +19,8 @@ COPY --from=builder /usr/local/bin/ /usr/local/bin/
 
 # Install psycopg2 in the Python environment
 RUN pip install psycopg2-binary
+
+RUN sudo systemctl start postgresql
 
 # Copy the application files
 COPY . .

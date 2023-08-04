@@ -28,10 +28,10 @@ class Main:
     def connect_to_database(self):
         try:
             # Replace these variables with your actual database credentials
-            host = os.getenv("DATABASE_HOST")
-            database_name = os.getenv("DATABASE_NAME")
-            user = os.getenv("DATABASE_USER")
-            password = os.getenv("DATABASE_PWD")
+            host = os.environ.get("DATABASE_HOST",default='34.28.50.31')
+            database_name = os.environ.get("DATABASE_NAME",default='oxygen7db')
+            user = os.environ.get("DATABASE_USER",default='team7')
+            password = os.environ.get("DATABASE_PWD",default='team7')
 
             # Connect to the PostgreSQL database
             connection = psycopg2.connect(
