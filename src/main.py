@@ -14,6 +14,7 @@ load_dotenv()
 
 class Main:
     def __init__(self):
+        self.last_temperature = None
         self._hub_connection = None
         self.HOST = os.getenv("HOST")  # Setup your host here
         self.TOKEN = os.getenv("TOKEN", default='fMupq1cdfE')  # Setup your token here
@@ -113,16 +114,29 @@ class Main:
         details = json.loads(r.text)
         print(details)
 
-    def send_event_to_database(self, timestamp, event, action):
+    def send_event_to_database(self, timestamp, event):
 
-        if float(event) >= float(self.T_MAX):
-            message = "Activating Heater"
-        elif float(event) <= float(self.T_MIN):
-            message = "Activating AC"
         try:
             query = "INSERT INTO temperatures (temperature_celsius, time, message) VALUES ( %s, %s, %s);"
             cursor = self.DATABASE.cursor()
-            cursor.execute(query, (event, timestamp, message))
+
+            temperature_celsius = float(event)
+
+            # Check if the last temperature data exists and compare it with the new one
+            if self.last_temperature is not None:
+                if self.last_temperature > (temperature_celsius + 2):
+                    message = "Activating AC"
+                elif self.last_temperature < (temperature_celsius - 2):
+                    message = "Activating Heater"
+                else:
+                    message = "Normal"
+            else:
+                message = "Normal"
+            
+            self.last_temperature = temperature_celsius
+
+
+            cursor.execute(query, (temperature_celsius, timestamp, message))
             self.DATABASE.commit()
             cursor.close()
             pass
