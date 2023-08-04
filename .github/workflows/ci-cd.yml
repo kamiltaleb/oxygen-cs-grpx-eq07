@@ -1,19 +1,28 @@
 name: CI/CD Pipeline
-
 on:
   push:
     branches:
       - main
-
 env:
-  MYSQL_HOST: 127.0.0.1
-  MYSQL_DATABASE: log680
-  MYSQL_USER: root
-  MYSQL_ROOT_PASSWORD: root
+  POSTGRES_HOST: 34.28.50.31
+  POSTGRES_DB: oxygen7db
+  POSTGRES_USER: team7
+  POSTGRES_PASSWORD: team7
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
       - name: Checkout code
@@ -24,32 +33,23 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Start MySQL service
-        run: sudo systemctl start mysql.service
-
-      - name: Install MySQL client
-        run: sudo apt-get install mysql-client -y
-
-      - name: Set up Database
-        run: |
-          mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_ROOT_PASSWORD -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$MYSQL_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
-          mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;"
-          mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_ROOT_PASSWORD $MYSQL_DATABASE -e "CREATE TABLE IF NOT EXISTS hvac_data (timestamp datetime not null, event longtext not null);"
-
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Run PostgreSQL migrations
+        env:
+          DATABASE_HOST: ${{ job.services.postgres.ports[5432] }}
+          DATABASE_NAME: ${{ env.POSTGRES_DB }}
+          DATABASE_USER: ${{ env.POSTGRES_USER }}
+          DATABASE_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        run: alembic upgrade head
+
       - name: Run unit tests
         env:
-          DATABASE_HOST: 127.0.0.1
-          DATABASE_NAME: log680
-          DATABASE_USER: root
-          DATABASE_PASSWORD: root
-          HOST: http://34.95.34.5
-          TICKETS: 1
-          TOKEN: fMupq1cdfE
-          T_MAX: 25
-          T_MIN: 17
+          DATABASE_HOST: ${{ job.services.postgres.ports[5432] }}
+          DATABASE_NAME: ${{ env.POSTGRES_DB }}
+          DATABASE_USER: ${{ env.POSTGRES_USER }}
+          DATABASE_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
         run: pytest
 
       - name: Build Docker image
