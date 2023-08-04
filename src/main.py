@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import os
 import mysql.connector 
 from mysql.connector import Error
+import psycopg2
 
 load_dotenv()
 
@@ -23,13 +24,34 @@ class Main:
             "T_MAX", default=25
         )  # Setup your max temperature here
         self.T_MIN = os.environ.get("T_MIN", default=17)
-        self.DATABASE = mysql.connector.connect(host=os.getenv("DATABASE_HOST"),
-                                                database=os.getenv("DATABSE_NAME"),
-                                                user=os.getenv("DATABASE_USER"),
-                                                password=os.getenv("DATABASE_PWD"))  # Setup your database here
-        if self.DATABASE.is_connected():
-            db_info = self.DATABASE.get_server_info()
-            print("Connected to DB ", db_info)          #ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'DATABASE_PWD'; FLUSH PRIVILEGES;
+        self.DATABASE = self.connect_to_database()
+
+    def connect_to_database(self):
+        try:
+            # Replace these variables with your actual database credentials
+            host = os.getenv("DATABASE_HOST")
+            database_name = os.getenv("DATABASE_NAME")
+            user = os.getenv("DATABASE_USER")
+            password = os.getenv("DATABASE_PWD")
+
+            # Connect to the PostgreSQL database
+            connection = psycopg2.connect(
+                host=host,
+                database=database_name,
+                user=user,
+                password=password
+            )
+
+            cursor = connection.cursor()
+            cursor.execute("SELECT version();")
+            db_version = cursor.fetchone()[0]
+            print("Connected to DB", db_version)
+
+            return connection
+
+        except Exception as e:
+            # In case of an error, raise or handle it as needed
+            raise e
 
     def __del__(self):
         if self._hub_connection != None:
@@ -91,19 +113,22 @@ class Main:
         details = json.loads(r.text)
         print(details)
 
-    def send_event_to_database(self, timestamp, event):
+    def send_event_to_database(self, timestamp, event, action):
 
+        if float(event) >= float(self.T_MAX):
+            message = "Activating Heater"
+        elif float(event) <= float(self.T_MIN):
+            message = "Activating AC"
         try:
-            query = "INSERT INTO log680.hvac_data (timestamp, event) VALUES ( %s, %s);"
-            print(timestamp)
-            print(event)
+            query = "INSERT INTO temperatures (temperature_celsius, time, message) VALUES ( %s, %s, %s);"
             cursor = self.DATABASE.cursor()
-            cursor.execute(query, (timestamp, event))
+            cursor.execute(query, (event, timestamp, message))
             self.DATABASE.commit()
             cursor.close()
             pass
         except mysql.connector.Error as e:
             print(f"An error occurred while executing the SQL query: {e}")
+
 
 if __name__ == "__main__":
     main = Main()
