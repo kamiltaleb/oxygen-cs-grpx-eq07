@@ -5,8 +5,6 @@ import json
 import time
 from dotenv import load_dotenv
 import os
-import mysql.connector 
-from mysql.connector import Error
 import psycopg2
 
 load_dotenv()
