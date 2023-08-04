@@ -20,8 +20,6 @@ COPY --from=builder /usr/local/bin/ /usr/local/bin/
 # Install psycopg2 in the Python environment
 RUN pip install psycopg2-binary
 
-RUN sudo systemctl start postgresql
-
 # Copy the application files
 COPY . .
 
