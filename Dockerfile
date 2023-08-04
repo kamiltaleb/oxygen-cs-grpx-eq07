@@ -1,5 +1,5 @@
 # Stage 1: Construction des dépendances
-FROM python:3.8-alpine AS builder
+FROM python:3.9-alpine AS builder
 
 WORKDIR /build
 
@@ -9,7 +9,7 @@ RUN pip install --no-cache-dir pipenv && \
     pipenv install --system --deploy --ignore-pipfile
 
 # Stage 2: Image finale
-FROM python:3.8-slim-buster
+FROM python:3.9-slim-buster
 
 WORKDIR /app
 
