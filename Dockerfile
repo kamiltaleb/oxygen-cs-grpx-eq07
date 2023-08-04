@@ -1,5 +1,5 @@
 # Stage 1: Construction des dépendances
-FROM python:3.9-alpine AS builder
+FROM python:3.11.4-alpine AS builder
 
 WORKDIR /build
 
@@ -9,9 +9,13 @@ RUN pip install --no-cache-dir pipenv && \
     pipenv install --system --deploy --ignore-pipfile
 
 # Stage 2: Image finale
-FROM python:3.9-alpine
+FROM python:3.11.4-alpine-slim-buster
 
 WORKDIR /app
+
+# Copier les fichiers de l'étape précédente
+COPY --from=builder /usr/local/lib/python3.11/site-packages/ /usr/local/lib/python3.11/site-packages/
+COPY --from=builder /usr/local/bin/ /usr/local/bin/
 
 # Copy the application files
 COPY . .
