@@ -3,21 +3,18 @@ FROM python:3.9-alpine AS builder
 
 WORKDIR /build
 
-# Copier uniquement les fichiers de dépendances et installer les dépendances
+# Copy only the dependency files and install the dependencies
 COPY Pipfile* ./
 RUN pip install --no-cache-dir pipenv && \
     pipenv install --system --deploy --ignore-pipfile
 
 # Stage 2: Image finale
-FROM python:3.9-slim-buster
+FROM python:3.9-alpine
 
 WORKDIR /app
 
-# Copier les fichiers de l'étape précédente
-COPY --from=builder /usr/local/ /usr/local/
-
-# Copier le reste des fichiers de l'application
+# Copy the application files
 COPY . .
 
-# Exécuter l'application
+# Execute the application
 CMD [ "python", "src/main.py" ]
