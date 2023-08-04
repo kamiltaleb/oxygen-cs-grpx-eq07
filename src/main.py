@@ -14,7 +14,7 @@ class Main:
     def __init__(self):
         self.last_temperature = None
         self._hub_connection = None
-        self.HOST = os.getenv("HOST")  # Setup your host here
+        self.HOST = os.environ.get("HOST",default='http://34.95.34.5')  # Setup your host here
         self.TOKEN = os.getenv("TOKEN", default='fMupq1cdfE')  # Setup your token here
         if not self.TOKEN:
             raise ValueError("The TOKEN environment variable is not set.")
