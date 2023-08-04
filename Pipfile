@@ -7,11 +7,12 @@ name = "pypi"
 requests = "*"
 signalrcore = "*"
 python-dotenv = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.8"
+python_version = "3.11.4"
 
 [scripts]
 start = "python src/main.py"
